@@ -17,4 +17,16 @@ void main() {
   // Partial match (key path is valid but doesn't have a value associated with it)
   print(trie.get([1, 2]));
   // Node{value: null, map: {3: Node{value: 123, map: {}}}}
+
+  // Delete a value.
+  trie.remove([1, 2, 3]);
+  print(trie.get([1, 2, 3]));
+  // null
+
+  // Renames the last key component of a value.
+  trie.renameLastComponent([1, 3, 5, 7], -7);
+  print(trie.get([1, 3, 5, 7]));
+  // null
+  print(trie.get([1, 3, 5, -7]));
+  // Node{value: 1357, map: {}}
 }

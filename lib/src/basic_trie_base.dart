@@ -19,6 +19,8 @@ class BasicTrie<K, V> {
 
   final Node<K, V> _rootNode = Node<K, V>();
 
+  Node<K, V> get rootNode => _rootNode;
+
   /// Sets the node value associated with the specified key.
   void set(List<K> keys, V val) {
     _log('Calling set with keys "$keys", val: "$val"');
@@ -44,9 +46,60 @@ class BasicTrie<K, V> {
   /// Gets the value associated with the specified key.
   Node<K, V>? get(List<K> keys) {
     _checkKeys(keys);
-    return _getCore(_rootNode, keys, 0);
+    var node = _getCore(_rootNode, keys, 0);
+    if (node == null) {
+      return null;
+    }
+    // Handle empty node due to deletion.
+    if (node.map.isEmpty && node.value == null) {
+      return null;
+    }
+    return node;
   }
 
+  /// Deletes the value associated with the specified key.
+  /// Returns false if value is not found.
+  bool remove(List<K> keys) {
+    _checkKeys(keys);
+
+    var parentNode = _getParentNode(keys);
+    if (parentNode == null) {
+      return false;
+    }
+    var lastComponent = keys.last!;
+    if (parentNode.map[lastComponent] == null) {
+      return false;
+    }
+    parentNode.map.remove(lastComponent);
+    return true;
+  }
+
+  /// Renames the last component of a specified key to a new name.
+  /// Returns false if value is not found.
+  bool renameLastComponent(List<K> keys, K newLastComponent) {
+    _checkKeys(keys);
+
+    var parentNode = _getParentNode(keys);
+    if (parentNode == null) {
+      return false;
+    }
+
+    var lastComponent = keys.last!;
+    var lastNode = parentNode.map[lastComponent];
+    if (lastNode == null) {
+      return false;
+    }
+    parentNode.map.remove(lastComponent);
+    parentNode.map[newLastComponent] = lastNode;
+    return true;
+  }
+
+  Node<K, V>? _getParentNode(List<K> keys) {
+    return keys.length == 1 ? _rootNode : get(keys.sublist(0, keys.length - 1));
+  }
+
+  /// NOTE: this can return an empty node (node.map is empty && node.value == null) if the node was
+  /// removed by [remove].
   Node<K, V>? _getCore(Node<K, V> node, List<K> keys, int index) {
     // Exit condition.
     if (index >= keys.length) {
