@@ -53,6 +53,17 @@ void main() {
     expect(trie.get([1]), isNull);
   });
 
+  test('Delete parent', () {
+    var trie = BasicTrie<int, String>();
+    trie.set([1, 2, 3], '123');
+    trie.set([1, 2, 4], '124');
+
+    trie.remove([1, 2]);
+    expect(trie.get([1, 2]), isNull);
+    expect(trie.get([1, 2, 3]), isNull);
+    expect(trie.get([1, 2, 4]), isNull);
+  });
+
   test('Rename last component (non-root node)', () {
     var trie = BasicTrie<int, String>();
     trie.set([1, 2, 3], '123');
