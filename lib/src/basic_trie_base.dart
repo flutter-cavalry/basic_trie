@@ -1,7 +1,7 @@
 /// Represents a node in a [BasicTrie].
-class Node<K, V> {
+class BasicTrieNode<K, V> {
   /// The underlying map of this node.
-  Map<K, Node<K, V>> map = {};
+  Map<K, BasicTrieNode<K, V>> map = {};
 
   /// The value associated with this entry.
   V? value;
@@ -17,9 +17,9 @@ class Node<K, V> {
 class BasicTrie<K, V> {
   bool logging = false;
 
-  final Node<K, V> _rootNode = Node<K, V>();
+  final BasicTrieNode<K, V> _rootNode = BasicTrieNode<K, V>();
 
-  Node<K, V> get rootNode => _rootNode;
+  BasicTrieNode<K, V> get rootNode => _rootNode;
 
   /// Sets the node value associated with the specified key.
   void set(List<K> keys, V val) {
@@ -35,7 +35,7 @@ class BasicTrie<K, V> {
         node = target;
       } else {
         _log('Creating new node');
-        var newNode = Node<K, V>();
+        var newNode = BasicTrieNode<K, V>();
         node.map[key] = newNode;
         node = newNode;
       }
@@ -44,7 +44,7 @@ class BasicTrie<K, V> {
   }
 
   /// Gets the value associated with the specified key.
-  Node<K, V>? get(List<K> keys) {
+  BasicTrieNode<K, V>? get(List<K> keys) {
     _checkKeys(keys);
     var node = _getCore(_rootNode, keys, 0);
     if (node == null) {
@@ -94,13 +94,14 @@ class BasicTrie<K, V> {
     return true;
   }
 
-  Node<K, V>? _getParentNode(List<K> keys) {
+  BasicTrieNode<K, V>? _getParentNode(List<K> keys) {
     return keys.length == 1 ? _rootNode : get(keys.sublist(0, keys.length - 1));
   }
 
   /// NOTE: this can return an empty node (node.map is empty && node.value == null) if the node was
   /// removed by [remove].
-  Node<K, V>? _getCore(Node<K, V> node, List<K> keys, int index) {
+  BasicTrieNode<K, V>? _getCore(
+      BasicTrieNode<K, V> node, List<K> keys, int index) {
     // Exit condition.
     if (index >= keys.length) {
       _log('Found the value "${node.value}"');
@@ -110,7 +111,7 @@ class BasicTrie<K, V> {
     final key = keys[index];
     _logWithKey(key, 'Getting value with key "$key"');
 
-    Node<K, V>? result;
+    BasicTrieNode<K, V>? result;
     final target = node.map[key];
     if (target != null) {
       _logWithKey(key, 'Target found');
