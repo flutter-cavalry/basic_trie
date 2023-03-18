@@ -40,17 +40,21 @@ void main() {
     trie.set([1, 2, 3], '123');
     trie.set([1, 2], '12');
 
-    trie.remove([1, 2, 3]);
+    var removed = trie.remove([1, 2, 3]);
+    expect(removed!.value, '123');
     expect(trie.get([1, 2, 3]), isNull);
     expect(trie.get([1, 2])?.value, '12');
+    expect(trie.remove([1, 3, 4]), null);
   });
 
   test('Delete (root node)', () {
     var trie = BasicTrie<int, String>();
     trie.set([1], '1');
 
-    trie.remove([1]);
+    var removed = trie.remove([1]);
+    expect(removed!.value, '1');
     expect(trie.get([1]), isNull);
+    expect(trie.remove([4]), null);
   });
 
   test('Delete parent', () {

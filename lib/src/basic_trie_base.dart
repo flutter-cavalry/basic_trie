@@ -58,20 +58,19 @@ class BasicTrie<K, V> {
   }
 
   /// Deletes the value associated with the specified key.
-  /// Returns false if value is not found.
-  bool remove(List<K> keys) {
+  /// Returns null if no value is found.
+  BasicTrieNode<K, V>? remove(List<K> keys) {
     _checkKeys(keys);
 
     var parentNode = _getParentNode(keys);
     if (parentNode == null) {
-      return false;
+      return null;
     }
     var lastComponent = keys.last!;
     if (parentNode.map[lastComponent] == null) {
-      return false;
+      return null;
     }
-    parentNode.map.remove(lastComponent);
-    return true;
+    return parentNode.map.remove(lastComponent);
   }
 
   /// Renames the last component of a specified key to a new name.
