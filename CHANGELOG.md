@@ -1,3 +1,7 @@
+## 1.3.0
+
+- `remove` now returns `BasicTrieNode<K, V>?`.
+
 ## 1.2.0
 
 - Rename `Node` to `BasicTrieNode`.
