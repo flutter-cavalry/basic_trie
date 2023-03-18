@@ -1,3 +1,7 @@
+## 1.4.0
+
+- Added `move`.
+
 ## 1.3.0
 
 - `remove` now returns `BasicTrieNode<K, V>?`.

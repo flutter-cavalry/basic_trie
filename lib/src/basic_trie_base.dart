@@ -93,6 +93,38 @@ class BasicTrie<K, V> {
     return true;
   }
 
+  /// Moves the value associated with [src] to another key path defined by [dest].
+  void move(List<K> src, List<K> dest) {
+    _log('move: $src, $dest');
+    _checkKeys(src);
+    _checkKeys(dest);
+    var srcValue = get(src);
+
+    // Create parent nodes.
+    _log('Create parent nodes');
+    var parentNode = _rootNode;
+    for (var key in dest.take(dest.length - 1)) {
+      _log('Setting key "$key"');
+
+      var target = parentNode.map[key];
+      if (target != null) {
+        _log('Target found');
+        parentNode = target;
+      } else {
+        _log('Creating new node');
+        var newNode = BasicTrieNode<K, V>();
+        parentNode.map[key] = newNode;
+        parentNode = newNode;
+      }
+    }
+    if (srcValue == null) {
+      parentNode.map.remove(dest.last);
+    } else {
+      parentNode.map[dest.last] = srcValue;
+    }
+    remove(src);
+  }
+
   BasicTrieNode<K, V>? _getParentNode(List<K> keys) {
     return keys.length == 1 ? _rootNode : get(keys.sublist(0, keys.length - 1));
   }
