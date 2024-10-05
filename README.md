@@ -1,7 +1,7 @@
+## basic_trie
+
 [![pub package](https://img.shields.io/pub/v/basic_trie.svg)](https://pub.dev/packages/basic_trie)
 [![Build Status](https://github.com/flutter-cavalry/basic_trie/workflows/Build/badge.svg)](https://github.com/flutter-cavalry/basic_trie/actions)
-
-## basic_trie
 
 A simple trie implementation in Dart.
 
