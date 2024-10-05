@@ -1,3 +1,7 @@
+## 1.5.2
+
+- Allow `create` func in `getOrCreate` to return null.
+
 ## 1.5.0
 
 - Add `getOrCreate`.
