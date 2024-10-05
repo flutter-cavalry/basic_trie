@@ -1,3 +1,7 @@
+## 1.5.0
+
+- Add `getOrCreate`.
+
 ## 1.4.0
 
 - Added `move`.

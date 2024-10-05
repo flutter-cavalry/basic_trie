@@ -132,4 +132,20 @@ void main() {
     trie.move([9], [1, 2, 3]);
     expect(trie.get([1, 2, 3])?.value, null);
   });
+
+  test('Get or create', () async {
+    var trie = BasicTrie<int, String>();
+    var value = await trie.getOrCreate([1, 2, 3], () async => '123');
+    expect(value.value, '123');
+    expect(trie.get([1, 2, 3])?.value, '123');
+    value = await trie.getOrCreate([1, 2, 3], () async => '456');
+    expect(value.value, '123');
+
+    value = await trie.getOrCreate([1, 2], () async => '12');
+    expect(value.value, '12');
+    value = await trie.getOrCreate([1, 2], () async => '45');
+    expect(value.value, '12');
+    expect(trie.get([1, 2])?.value, '12');
+    expect(trie.get([1, 2, 3])?.value, '123');
+  });
 }

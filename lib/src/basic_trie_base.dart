@@ -57,6 +57,19 @@ class BasicTrie<K, V> {
     return node;
   }
 
+  /// Gets or creates a value associated with the specified key.
+  Future<BasicTrieNode<K, V>> getOrCreate(
+      List<K> keys, Future<V> Function() create) async {
+    var node = get(keys);
+    if (node != null) {
+      node.value ??= await create();
+      return node;
+    }
+    var value = await create();
+    set(keys, value);
+    return get(keys)!;
+  }
+
   /// Deletes the value associated with the specified key.
   /// Returns null if no value is found.
   BasicTrieNode<K, V>? remove(List<K> keys) {
