@@ -25,21 +25,7 @@ class BasicTrie<K, V> {
   BasicTrieNode<K, V> set(List<K> keys, V val) {
     _log('Calling set with keys "$keys", val: "$val"');
     _checkKeys(keys);
-    var node = _rootNode;
-    for (var key in keys) {
-      _log('Setting key "$key"');
-
-      var target = node.map[key];
-      if (target != null) {
-        _log('Target found');
-        node = target;
-      } else {
-        _log('Creating new node');
-        var newNode = BasicTrieNode<K, V>();
-        node.map[key] = newNode;
-        node = newNode;
-      }
-    }
+    final node = _allocateNode(keys);
     node.value = val;
     return node;
   }
@@ -60,14 +46,15 @@ class BasicTrie<K, V> {
 
   /// Gets or creates a value associated with the specified key.
   Future<BasicTrieNode<K, V>> getOrCreate(
-      List<K> keys, Future<V> Function() create) async {
-    var node = get(keys);
-    if (node != null) {
-      node.value ??= await create();
-      return node;
+      List<K> keys, Future<V?> Function() create) async {
+    var getNode = get(keys);
+    if (getNode != null) {
+      getNode.value ??= await create();
+      return getNode;
     }
-    var value = await create();
-    return set(keys, value);
+    final allocNode = _allocateNode(keys);
+    allocNode.value ??= await create();
+    return allocNode;
   }
 
   /// Deletes the value associated with the specified key.
@@ -172,6 +159,25 @@ class BasicTrie<K, V> {
     }
     _logWithKey(key, 'Nothing found');
     return result;
+  }
+
+  BasicTrieNode<K, V> _allocateNode(List<K> keys) {
+    var node = _rootNode;
+    for (var key in keys) {
+      _log('Setting key "$key"');
+
+      var target = node.map[key];
+      if (target != null) {
+        _log('Target found');
+        node = target;
+      } else {
+        _log('Creating new node');
+        var newNode = BasicTrieNode<K, V>();
+        node.map[key] = newNode;
+        node = newNode;
+      }
+    }
+    return node;
   }
 
   void _log(String s) {

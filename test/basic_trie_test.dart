@@ -147,5 +147,9 @@ void main() {
     expect(value.value, '12');
     expect(trie.get([1, 2])?.value, '12');
     expect(trie.get([1, 2, 3])?.value, '123');
+
+    // Do nothing if returning null.
+    value = await trie.getOrCreate([1, 2, 3], () async => null);
+    expect(value.value, '123');
   });
 }
