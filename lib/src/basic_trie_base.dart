@@ -22,7 +22,7 @@ class BasicTrie<K, V> {
   BasicTrieNode<K, V> get rootNode => _rootNode;
 
   /// Sets the node value associated with the specified key.
-  void set(List<K> keys, V val) {
+  BasicTrieNode<K, V> set(List<K> keys, V val) {
     _log('Calling set with keys "$keys", val: "$val"');
     _checkKeys(keys);
     var node = _rootNode;
@@ -41,6 +41,7 @@ class BasicTrie<K, V> {
       }
     }
     node.value = val;
+    return node;
   }
 
   /// Gets the value associated with the specified key.
@@ -66,8 +67,7 @@ class BasicTrie<K, V> {
       return node;
     }
     var value = await create();
-    set(keys, value);
-    return get(keys)!;
+    return set(keys, value);
   }
 
   /// Deletes the value associated with the specified key.
